@@ -14,12 +14,12 @@ import { API, API_LOGIN, API_SIGNUP } from "../constants/API";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import axios from "axios";
 
-if (
-  Platform.OS === "android" &&
-  UIManager.setLayoutAnimationEnabledExperimental
-) {
-  UIManager.setLayoutAnimationEnabledExperimental(true);
-} //Needs to be manually enabled for android
+// if (
+//   Platform.OS === "android" &&
+//   UIManager.setLayoutAnimationEnabledExperimental
+// ) {
+//   UIManager.setLayoutAnimationEnabledExperimental(true);
+// } //Needs to be manually enabled for android
 
 export default function SignInSignUpScreen({ navigation }) {
   const [username, setUsername] = useState("");
@@ -27,7 +27,7 @@ export default function SignInSignUpScreen({ navigation }) {
   const [loading, setLoading] = useState(false);
   const [errorText, setErrorText] = useState("");
   const [isLogIn, setIsLogIn] = useState(false);
-  const [confirmPassword, setConfirmPassword] = useState();
+  const [confirmPassword, setConfirmPassword] = useState("");
 
   async function login() {
     console.log("---- Login time ----");
@@ -116,6 +116,7 @@ export default function SignInSignUpScreen({ navigation }) {
             placeholder="Confirm Password:"
             placeholderTextColor="#003f5c"
             secureTextEntry={true}
+            value={confirmPassword}
             onChangeText={(pw) => setConfirmPassword(pw)}
           />
         </View>
