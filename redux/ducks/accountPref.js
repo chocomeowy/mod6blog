@@ -6,7 +6,7 @@ import { Appearance } from "react-native";
 const initialMode = Appearance.getColorScheme();
 
 const initialState = {
-  isDark: initialMode,
+  isDark: initialMode === "light",
   profilePicture: null,
 };
 

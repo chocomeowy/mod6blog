@@ -5,6 +5,7 @@ import {
   Text,
   View,
   Switch,
+  Image,
   Animated,
   TouchableWithoutFeedback,
 } from "react-native";
@@ -13,7 +14,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import axios from "axios";
 import { API, API_WHOAMI } from "../constants/API";
 import { useSelector, useDispatch } from "react-redux";
-import { changeModeAction } from "../redux/ducks/accountPref";
+import { changeModeAction, deletePicAction } from "../redux/ducks/accountPref";
 import { logOutAction } from "../redux/ducks/blogAuth";
 
 export default function AccountScreen({ navigation }) {
@@ -55,6 +56,10 @@ export default function AccountScreen({ navigation }) {
     dispatch(changeModeAction());
   }
 
+  function deletePic() {
+    dispatch(deletePicAction());
+  }
+
   function signOut() {
     dispatch(logOutAction());
     navigation.navigate("SignInSignUp");
@@ -75,16 +80,33 @@ export default function AccountScreen({ navigation }) {
   return (
     <View style={[styles.container, { alignItems: "center" }]}>
       <Text style={[styles.title, styles.text, { marginTop: 30 }]}>
-        {" "}
         Hello {username} !
       </Text>
+      {profilePicture === null ? (
+        <TouchableOpacity onPress={() => navigation.navigate("Camera")}>
+          <Text style={{ marginTop: 10, fontSize: 20, color: "#0000EE" }}>
+            No profile picture. Click to take one.
+          </Text>
+        </TouchableOpacity>
+      ) : (
+        <>
+          <Image
+            source={{ uri: profilePicture?.uri }}
+            style={{ width: 250, height: 250, borderRadius: 200 }}
+          />
+          <TouchableOpacity onPress={() => navigation.navigate("Camera")}>
+            <Text style={{ marginTop: 10, fontSize: 20, color: "#0000EE" }}>
+              Dont like this picture? Click to take one.
+            </Text>
+          </TouchableOpacity>
+          <TouchableOpacity onPress={deletePic}>
+            <Text style={{ marginTop: 10, fontSize: 20, color: "#0000EE" }}>
+              Delete picture?
+            </Text>
+          </TouchableOpacity>
+        </>
+      )}
 
-      <TouchableOpacity onPress={() => navigation.navigate("Camera")}>
-        <Text style={{ marginTop: 10, fontSize: 20, color: "#0000EE" }}>
-          {" "}
-          No profile picture. Click to take one.{" "}
-        </Text>
-      </TouchableOpacity>
       <View
         style={{
           flexDirection: "row",
