@@ -8,17 +8,23 @@ import {
   Animated,
   TouchableWithoutFeedback,
 } from "react-native";
-import { commonStyles, lightStyles } from "../styles/commonStyles";
+import { commonStyles, lightStyles, darkStyles } from "../styles/commonStyles";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import axios from "axios";
 import { API, API_WHOAMI } from "../constants/API";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
+import { changeModeAction } from "../redux/ducks/accountPref";
+import { logOutAction } from "../redux/ducks/blogAuth";
 
 export default function AccountScreen({ navigation }) {
   const [username, setUsername] = useState(null);
-
-  const styles = { ...commonStyles, ...lightStyles };
+  const isDark = useSelector((state) => state.accountPrefs.isDark);
+  const styles = { ...commonStyles, ...(isDark ? darkStyles : lightStyles) };
   const token = useSelector((state) => state.auth.token);
+  const profilePicture = useSelector(
+    (state) => state.accountPrefs.profilePicture
+  );
+  const dispatch = useDispatch();
 
   async function getUsername() {
     console.log("---- Getting user name ----");
@@ -45,8 +51,12 @@ export default function AccountScreen({ navigation }) {
     }
   }
 
+  function switchMode() {
+    dispatch(changeModeAction());
+  }
+
   function signOut() {
-    AsyncStorage.removeItem("token");
+    dispatch(logOutAction());
     navigation.navigate("SignInSignUp");
   }
 
@@ -64,8 +74,31 @@ export default function AccountScreen({ navigation }) {
 
   return (
     <View style={[styles.container, { alignItems: "center" }]}>
-      <Text style={{ marginTop: 20 }}>Account Screen</Text>
-      <Text>{username}</Text>
+      <Text style={[styles.title, styles.text, { marginTop: 30 }]}>
+        {" "}
+        Hello {username} !
+      </Text>
+
+      <TouchableOpacity onPress={() => navigation.navigate("Camera")}>
+        <Text style={{ marginTop: 10, fontSize: 20, color: "#0000EE" }}>
+          {" "}
+          No profile picture. Click to take one.{" "}
+        </Text>
+      </TouchableOpacity>
+      <View
+        style={{
+          flexDirection: "row",
+          justifyContent: "space-between",
+          alignItems: "center",
+          margin: 20,
+        }}
+      >
+        <Text style={[styles.content, styles.text]}> Dark Mode? </Text>
+        <Switch value={isDark} onChange={switchMode} />
+      </View>
+      <TouchableOpacity style={[styles.button]} onPress={signOut}>
+        <Text style={styles.buttonText}>Sign Out</Text>
+      </TouchableOpacity>
     </View>
   );
 }

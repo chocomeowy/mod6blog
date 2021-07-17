@@ -10,13 +10,14 @@ import { FontAwesome } from "@expo/vector-icons";
 import axios from "axios";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { API, API_POSTS } from "../constants/API";
-import { lightStyles } from "../styles/commonStyles";
+import { lightStyles, commonStyles, darkStyles } from "../styles/commonStyles";
 import { useSelector } from "react-redux";
 
 export default function IndexScreen({ navigation, route }) {
   const [posts, setPosts] = useState([]);
   const [refreshing, setRefreshing] = useState(false);
-  const styles = lightStyles;
+  const isDark = useSelector((state) => state.accountPrefs.isDark);
+  const styles = { ...commonStyles, ...(isDark ? darkStyles : lightStyles) };
   const token = useSelector((state) => state.auth.token);
 
   // This is to set up the top right button

@@ -11,7 +11,7 @@ import {
   Keyboard,
 } from "react-native";
 import { API, API_LOGIN, API_SIGNUP } from "../constants/API";
-import AsyncStorage from "@react-native-async-storage/async-storage";
+//import AsyncStorage from "@react-native-async-storage/async-storage";
 import axios from "axios";
 import { useDispatch } from "react-redux";
 import { logInAction } from "../redux/ducks/blogAuth";
