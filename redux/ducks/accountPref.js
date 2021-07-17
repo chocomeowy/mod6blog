@@ -1,9 +1,12 @@
 export const CHANGE_MODE = "change_mode";
 export const UPLOAD_PIC = "profile_mode";
 export const DELETE_PIC = "delete_photo";
+import { Appearance } from "react-native";
+
+const initialMode = Appearance.getColorScheme();
 
 const initialState = {
-  isDark: false,
+  isDark: initialMode,
   profilePicture: null,
 };
 
